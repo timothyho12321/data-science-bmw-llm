@@ -639,27 +639,43 @@ Report generated automatically using OpenAI GPT-4 and Python
             para = para.strip()
             if para:
                 # Check if it's a list item or heading
-                if para.startswith(('- ', '* ', '1. ', '2. ', '3. ', '4. ', '5. ', '6. ', '7. ', '8. ', '9. ')):
-                    # It's a list, wrap in ul/ol
-                    if para[0].isdigit():
-                        formatted.append('<ol>')
-                    else:
-                        formatted.append('<ul>')
+                if para.startswith(('- ', '* ', '• ')):
+                    # It's a list, wrap in ul
+                    formatted.append('<ul>')
                     
                     for line in para.split('\n'):
                         if line.strip():
                             # Remove list markers
                             clean_line = line.strip()
-                            for marker in ['- ', '* ', '1. ', '2. ', '3. ', '4. ', '5. ', '6. ', '7. ', '8. ', '9. ']:
+                            for marker in ['- ', '* ', '• ']:
                                 if clean_line.startswith(marker):
                                     clean_line = clean_line[len(marker):]
                                     break
+                            # Check for numbered markers like "1. " "2. " etc and convert to bullet
+                            if len(clean_line) > 3 and clean_line[0].isdigit() and clean_line[1:3] in ['. ', ') ']:
+                                clean_line = clean_line[3:].strip()
                             formatted.append(f'<li>{clean_line}</li>')
                     
-                    if para[0].isdigit():
-                        formatted.append('</ol>')
-                    else:
-                        formatted.append('</ul>')
+                    formatted.append('</ul>')
+                elif para[0].isdigit() and len(para) > 2 and para[1:3] in ['. ', ') ']:
+                    # It's a numbered list - convert to bullet list
+                    formatted.append('<ul>')
+                    
+                    for line in para.split('\n'):
+                        if line.strip():
+                            # Remove numbered markers
+                            clean_line = line.strip()
+                            # Remove patterns like "1. " "2. " "10. " etc
+                            if len(clean_line) > 2 and clean_line[0].isdigit():
+                                # Find the end of the number
+                                num_end = 1
+                                while num_end < len(clean_line) and clean_line[num_end].isdigit():
+                                    num_end += 1
+                                if num_end < len(clean_line) and clean_line[num_end:num_end+2] in ['. ', ') ']:
+                                    clean_line = clean_line[num_end+2:].strip()
+                            formatted.append(f'<li>{clean_line}</li>')
+                    
+                    formatted.append('</ul>')
                 elif para.startswith('#'):
                     # It's a heading
                     level = para.count('#', 0, 4)

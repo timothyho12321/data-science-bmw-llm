@@ -8,8 +8,16 @@ import sys
 from datetime import datetime
 from data_analyzer import BMWDataAnalyzer
 from visualizer import BMWDataVisualizer
-from llm_insights import LLMInsightGenerator
 from report_generator import ReportGenerator
+
+# Import LLM module based on ROLE environment variable
+role = os.getenv('ROLE', 'Business Analyst').strip()
+if role.lower() in ['business chief', 'executive', 'chief']:
+    from llm_insights_executive import LLMInsightGenerator
+    print(f"🎯 Analysis Mode: Executive Level ({role})")
+else:
+    from llm_insights import LLMInsightGenerator
+    print(f"📊 Analysis Mode: Business Analyst Level ({role})")
 
 
 def print_banner():
@@ -99,6 +107,7 @@ def main():
     print("-" * 80)
     try:
         llm_generator = LLMInsightGenerator()
+        print("")
         llm_insights = llm_generator.generate_all_insights(analysis_data)
         print("✓ Generated comprehensive insights:")
         print("  - Executive Summary")

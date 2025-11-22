@@ -39,7 +39,16 @@ Edit `.env` and add your OpenAI API key:
 OPENAI_API_KEY=your_openai_api_key_here
 OPENAI_MODEL=gpt-4
 OPENAI_TEMPERATURE=0.7
+ROLE=Business Analyst
 ```
+
+**Configuration Options:**
+
+- **OPENAI_MODEL**: Choose between `gpt-4` (higher quality, ~$0.30-$0.60/report) or `gpt-3.5-turbo` (faster, cheaper, ~$0.03-$0.06/report)
+- **OPENAI_TEMPERATURE**: 0.0 (deterministic) to 1.0 (creative), recommended: 0.7
+- **ROLE**: Choose analysis depth
+  - `Business Analyst` (default): Detailed, comprehensive 4-5 paragraph analyses per section
+  - `Business Chief`: Executive-level strategic insights with BLUF structure, BCG Matrix, Pareto analysis
 
 ### 3. Prepare Data
 

@@ -25,6 +25,13 @@ class LLMInsightGenerator:
         self.client = OpenAI(api_key=self.api_key)
         self.model = os.getenv('OPENAI_MODEL', 'gpt-4')
         self.temperature = float(os.getenv('OPENAI_TEMPERATURE', '0.7'))
+        
+        # Print model being used
+        print(f"Using OpenAI model: {self.model}")
+        if 'gpt-3.5' in self.model.lower():
+            print("  → Using GPT-3.5-turbo (faster, more cost-effective)")
+        elif 'gpt-4' in self.model.lower():
+            print("  → Using GPT-4 (higher quality, more detailed insights)")
     
     def generate_executive_summary(self, analysis_data: Dict[str, Any]) -> str:
         """
