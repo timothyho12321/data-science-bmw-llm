@@ -1,10 +1,10 @@
 """
 LLM Integration Module for BMW Sales Analysis
-Uses OpenAI API to generate insights and narratives
+Supports OpenAI and Google Gemini APIs
 """
 
 import os
-from openai import OpenAI
+from llm_provider import LLMProvider
 from dotenv import load_dotenv
 from typing import Dict, Any, List
 import json
@@ -14,24 +14,11 @@ load_dotenv()
 
 
 class LLMInsightGenerator:
-    """Generates insights and narratives using OpenAI LLM"""
+    """Generates insights and narratives using LLM (OpenAI or Gemini)"""
     
     def __init__(self):
-        """Initialize OpenAI client"""
-        self.api_key = os.getenv('OPENAI_API_KEY')
-        if not self.api_key:
-            raise ValueError("OPENAI_API_KEY not found in environment variables. Please create a .env file with your API key.")
-        
-        self.client = OpenAI(api_key=self.api_key)
-        self.model = os.getenv('OPENAI_MODEL', 'gpt-4')
-        self.temperature = float(os.getenv('OPENAI_TEMPERATURE', '0.7'))
-        
-        # Print model being used
-        print(f"Using OpenAI model: {self.model}")
-        if 'gpt-3.5' in self.model.lower():
-            print("  → Using GPT-3.5-turbo (faster, more cost-effective)")
-        elif 'gpt-4' in self.model.lower():
-            print("  → Using GPT-4 (higher quality, more detailed insights)")
+        """Initialize LLM provider"""
+        self.llm = LLMProvider()
     
     def generate_executive_summary(self, analysis_data: Dict[str, Any]) -> str:
         """
@@ -64,17 +51,10 @@ Your executive summary should:
 Write in a professional, confident tone. Focus on insights, not just facts.
 """
         
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": "You are an expert business analyst specializing in automotive sales data."},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=self.temperature,
-            max_tokens=800
-        )
-        
-        return response.choices[0].message.content.strip()
+        return self.llm.generate_completion(
+            prompt=prompt,
+            system_prompt="You are an expert business analyst specializing in automotive sales data."
+        ).strip()
     
     def analyze_yearly_trends(self, analysis_data: Dict[str, Any]) -> str:
         """
@@ -110,17 +90,10 @@ Your analysis should:
 Be analytical and insightful. Use specific numbers and percentages. Write 4-5 paragraphs.
 """
         
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": "You are an expert automotive industry analyst."},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=self.temperature,
-            max_tokens=1000
+        return self.llm.generate_completion(
+            prompt=prompt,
+            system_prompt="You are an expert automotive industry analyst."
         )
-        
-        return response.choices[0].message.content.strip()
     
     def analyze_regional_performance(self, analysis_data: Dict[str, Any]) -> str:
         """
@@ -153,17 +126,10 @@ Your analysis should:
 Be specific with numbers and percentages. Write 4-5 paragraphs with actionable insights.
 """
         
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": "You are an expert in global automotive market analysis."},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=self.temperature,
-            max_tokens=1000
+        return self.llm.generate_completion(
+            prompt=prompt,
+            system_prompt="You are an expert in global automotive market analysis."
         )
-        
-        return response.choices[0].message.content.strip()
     
     def analyze_model_performance(self, analysis_data: Dict[str, Any]) -> str:
         """
@@ -196,17 +162,10 @@ Your analysis should:
 Provide strategic insights about product portfolio management. Write 4-5 paragraphs.
 """
         
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": "You are an expert automotive product strategist."},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=self.temperature,
-            max_tokens=1000
+        return self.llm.generate_completion(
+            prompt=prompt,
+            system_prompt="You are an expert automotive product strategist."
         )
-        
-        return response.choices[0].message.content.strip()
     
     def analyze_price_drivers(self, analysis_data: Dict[str, Any]) -> str:
         """
@@ -245,17 +204,10 @@ Your analysis should:
 Be analytical and data-driven. Write 4-5 paragraphs with strategic recommendations.
 """
         
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": "You are an expert in pricing strategy and market analysis."},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=self.temperature,
-            max_tokens=1000
+        return self.llm.generate_completion(
+            prompt=prompt,
+            system_prompt="You are an expert in pricing strategy and market analysis."
         )
-        
-        return response.choices[0].message.content.strip()
     
     def generate_creative_insights(self, analysis_data: Dict[str, Any]) -> str:
         """
@@ -294,17 +246,10 @@ Examples of creative insights might include:
 Provide 2 distinct, creative insights. Write 3-4 paragraphs total.
 """
         
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": "You are a creative strategic business consultant with deep automotive industry expertise."},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=0.8,  # Higher temperature for more creative output
-            max_tokens=1000
+        return self.llm.generate_completion(
+            prompt=prompt,
+            system_prompt="You are a creative strategic business consultant with deep automotive industry expertise."
         )
-        
-        return response.choices[0].message.content.strip()
     
     def generate_recommendations(self, analysis_data: Dict[str, Any]) -> str:
         """
@@ -337,17 +282,10 @@ Your recommendations should:
 Format as a numbered list with each recommendation being 2-3 sentences explaining the what, why, and expected impact.
 """
         
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": "You are a senior executive providing strategic direction."},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=self.temperature,
-            max_tokens=1200
+        return self.llm.generate_completion(
+            prompt=prompt,
+            system_prompt="You are a senior executive providing strategic direction."
         )
-        
-        return response.choices[0].message.content.strip()
     
     def generate_all_insights(self, analysis_data: Dict[str, Any]) -> Dict[str, str]:
         """

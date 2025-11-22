@@ -7,14 +7,16 @@ A comprehensive LLM-powered system for analyzing BMW sales data (2020-2024), gen
 - **Automated Data Cleaning**: Removes duplicates, handles missing values, detects outliers
 - **Statistical Analysis**: Comprehensive analysis of sales trends, regional performance, model performance
 - **Data Visualization**: Professional charts and graphs using matplotlib and seaborn
-- **LLM-Powered Insights**: Uses OpenAI GPT-4 to generate executive summaries, strategic recommendations, and creative business insights
+- **LLM-Powered Insights**: Supports both OpenAI (GPT-4/GPT-3.5-turbo) and Google Gemini (Pro/Flash) to generate executive summaries, strategic recommendations, and creative business insights
+- **Multi-Provider Support**: Flexible LLM provider configuration - choose based on quality, speed, and cost needs
+- **Role-Based Analysis**: Toggle between detailed analyst-level and executive-level strategic insights
 - **Automated Reporting**: Generates professional HTML and Markdown reports
 - **Reproducible**: Consistent report structure with minor variations due to LLM stochasticity
 
 ## 📋 Requirements
 
 - Python 3.12
-- OpenAI API Key
+- LLM API Key (OpenAI or Google Gemini)
 - BMW sales data file: `data-bmw/BMW sales data (2020-2024).xlsx`
 
 ## 🚀 Quick Start
@@ -33,19 +35,40 @@ Create a `.env` file in the project root:
 Copy-Item .env.example .env
 ```
 
-Edit `.env` and add your OpenAI API key:
+Edit `.env` and add your LLM API key:
 
 ```
+# Choose your LLM provider
+LLM_PROVIDER=openai  # or 'gemini'
+
+# If using OpenAI:
 OPENAI_API_KEY=your_openai_api_key_here
 OPENAI_MODEL=gpt-4
-OPENAI_TEMPERATURE=0.7
+
+# If using Google Gemini:
+GEMINI_API_KEY=your_gemini_api_key_here
+GEMINI_MODEL=gemini-1.5-flash
+
+LLM_TEMPERATURE=0.7
 ROLE=Business Analyst
 ```
 
 **Configuration Options:**
 
-- **OPENAI_MODEL**: Choose between `gpt-4` (higher quality, ~$0.30-$0.60/report) or `gpt-3.5-turbo` (faster, cheaper, ~$0.03-$0.06/report)
-- **OPENAI_TEMPERATURE**: 0.0 (deterministic) to 1.0 (creative), recommended: 0.7
+**LLM Provider:**
+- `openai` - Use OpenAI GPT models (GPT-4 or GPT-3.5-turbo)
+- `gemini` - Use Google Gemini models (Gemini 1.5 Pro or Flash)
+
+**OpenAI Models** (when `LLM_PROVIDER=openai`):
+- `gpt-4`: Higher quality, ~$0.30-$0.60/report
+- `gpt-3.5-turbo`: Faster, cheaper, ~$0.03-$0.06/report
+
+**Gemini Models** (when `LLM_PROVIDER=gemini`):
+- `gemini-1.5-pro`: Best quality, balanced performance
+- `gemini-1.5-flash`: Fastest, most cost-effective, ~$0.01-$0.02/report
+
+**Other Options:**
+- **LLM_TEMPERATURE**: 0.0 (deterministic) to 1.0 (creative), recommended: 0.7
 - **ROLE**: Choose analysis depth
   - `Business Analyst` (default): Detailed, comprehensive 4-5 paragraph analyses per section
   - `Business Chief`: Executive-level strategic insights with BLUF structure, BCG Matrix, Pareto analysis
@@ -182,8 +205,21 @@ Creates comprehensive reports:
 - Structured sections with table of contents
 - Responsive design for HTML
 
-## 🎨 LLM Guidance
+## 🎨 LLM Configuration
 
+The system supports multiple LLM providers with flexible configuration:
+
+### Supported Providers
+- **OpenAI**: GPT-4, GPT-3.5-turbo
+- **Google Gemini**: Gemini 1.5 Pro, Gemini 1.5 Flash
+
+### Analysis Modes
+- **Business Analyst**: Detailed 4-5 paragraph analyses
+- **Business Chief**: Executive BLUF-style strategic insights
+
+**For detailed provider comparison, costs, and switching instructions, see [LLM_PROVIDER_GUIDE.md](LLM_PROVIDER_GUIDE.md)**
+
+### LLM Guidance
 The LLM is specifically guided to:
 
 1. **Identify sales performance trends** - Analyze patterns over time and across regions
@@ -207,9 +243,15 @@ The LLM is specifically guided to:
 
 ## 🆘 Troubleshooting
 
-### Error: "OPENAI_API_KEY not found"
+### Error: "API key not found"
 - Ensure `.env` file exists in project root
-- Check that `OPENAI_API_KEY=your_key_here` is set correctly
+- Check the correct API key variable is set:
+  - OpenAI: `OPENAI_API_KEY=your_key_here`
+  - Gemini: `GEMINI_API_KEY=your_key_here`
+- Verify `LLM_PROVIDER` matches your configured provider
+
+### Error: "Unsupported LLM_PROVIDER"
+- Set `LLM_PROVIDER=openai` or `LLM_PROVIDER=gemini` (lowercase)
 
 ### Error: "File not found"
 - Ensure data file is named exactly: `BMW sales data (2020-2024).xlsx`
@@ -218,13 +260,19 @@ The LLM is specifically guided to:
 
 ### Error: "Module not found"
 - Run: `pip install -r requirements.txt`
+- For specific providers:
+  - OpenAI: `pip install openai>=1.0.0`
+  - Gemini: `pip install google-generativeai>=0.3.0`
 - Ensure you're using Python 3.12
 
-### OpenAI API Errors
-- Verify your API key is valid
-- Check you have available credits
+### LLM API Errors
+- Verify your API key is valid and active
+- Check you have available credits/quota
 - Ensure internet connection is working
-- Consider using GPT-3.5-turbo if rate limited: Set `OPENAI_MODEL=gpt-3.5-turbo` in `.env`
+- OpenAI rate limits: Consider using GPT-3.5-turbo or wait
+- Gemini rate limits: Check quota in Google Cloud Console
+
+**For more provider-specific troubleshooting, see [LLM_PROVIDER_GUIDE.md](LLM_PROVIDER_GUIDE.md)**
 
 ## 💡 Alternative: Using Google Gemini (Free)
 

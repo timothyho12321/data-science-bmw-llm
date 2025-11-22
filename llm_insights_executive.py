@@ -1,10 +1,10 @@
 """
 LLM Integration Module for Executive-Level BMW Sales Analysis
-Uses OpenAI API to generate high-level strategic insights
+Supports OpenAI and Google Gemini APIs
 """
 
 import os
-from openai import OpenAI
+from llm_provider import LLMProvider
 from dotenv import load_dotenv
 from typing import Dict, Any, List
 import json
@@ -13,23 +13,11 @@ import json
 load_dotenv()
 
 class LLMInsightGenerator:
-    """Generates high-level strategic insights using OpenAI LLM"""
+    """Generates high-level strategic insights using LLM (OpenAI or Gemini)"""
     
     def __init__(self):
-        """Initialize OpenAI client"""
-        self.api_key = os.getenv('OPENAI_API_KEY')
-        if not self.api_key:
-            raise ValueError("OPENAI_API_KEY not found. Please check your .env file.")
-        
-        self.client = OpenAI(api_key=self.api_key)
-        self.model = os.getenv('OPENAI_MODEL', 'gpt-4')
-        self.temperature = float(os.getenv('OPENAI_TEMPERATURE', '0.7'))
-        
-        print(f"Using OpenAI model: {self.model}")
-        if 'gpt-3.5' in self.model.lower():
-            print("  → Using GPT-3.5-turbo (faster, more cost-effective)")
-        elif 'gpt-4' in self.model.lower():
-            print("  → Using GPT-4 (higher quality, more detailed insights)")
+        """Initialize LLM provider"""
+        self.llm = LLMProvider()
 
     def _get_system_prompt(self, role_description: str) -> str:
         """Helper to create consistent system prompts with formatting rules"""
@@ -60,16 +48,10 @@ class LLMInsightGenerator:
         Keep it under 250 words. Punchy and authoritative.
         """
         
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": self._get_system_prompt("You are a C-level Executive assistant.")},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=self.temperature,
-            max_tokens=800
+        return self.llm.generate_completion(
+            prompt=prompt,
+            system_prompt=self._get_system_prompt("You are a C-level Executive assistant.")
         )
-        return response.choices[0].message.content.strip()
 
     def analyze_yearly_trends(self, analysis_data: Dict[str, Any]) -> str:
         prompt = f"""
@@ -88,16 +70,10 @@ class LLMInsightGenerator:
         Format as 3 distinct paragraphs using professional financial terminology.
         """
         
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": self._get_system_prompt("You are a Financial Planning & Analysis (FP&A) Manager.")},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=self.temperature,
-            max_tokens=1000
+        return self.llm.generate_completion(
+            prompt=prompt,
+            system_prompt=self._get_system_prompt("You are a Financial Planning & Analysis (FP&A) Manager.")
         )
-        return response.choices[0].message.content.strip()
 
     def analyze_regional_performance(self, analysis_data: Dict[str, Any]) -> str:
         prompt = f"""
@@ -114,16 +90,10 @@ class LLMInsightGenerator:
         Provide a strategic recommendation for the underperforming regions: Exit, Invest, or Pivot?
         """
         
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": self._get_system_prompt("You are a Global Market Strategist.")},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=self.temperature,
-            max_tokens=1000
+        return self.llm.generate_completion(
+            prompt=prompt,
+            system_prompt=self._get_system_prompt("You are a Chief Commercial Officer (CCO) focusing on geographic strategy.")
         )
-        return response.choices[0].message.content.strip()
 
     def analyze_model_performance(self, analysis_data: Dict[str, Any]) -> str:
         prompt = f"""
@@ -141,16 +111,10 @@ class LLMInsightGenerator:
         Be specific: "The X5 outperforms the 3-series by Y%..."
         """
         
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": self._get_system_prompt("You are a Product Portfolio Manager.")},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=self.temperature,
-            max_tokens=1000
+        return self.llm.generate_completion(
+            prompt=prompt,
+            system_prompt=self._get_system_prompt("You are a Product Portfolio Manager.")
         )
-        return response.choices[0].message.content.strip()
 
     def analyze_price_drivers(self, analysis_data: Dict[str, Any]) -> str:
         prompt = f"""
@@ -169,16 +133,10 @@ class LLMInsightGenerator:
         Focus on the economics of the sales.
         """
         
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": self._get_system_prompt("You are a Pricing Economist.")},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=self.temperature,
-            max_tokens=1000
+        return self.llm.generate_completion(
+            prompt=prompt,
+            system_prompt=self._get_system_prompt("You are a Pricing Economist.")
         )
-        return response.choices[0].message.content.strip()
 
     def generate_creative_insights(self, analysis_data: Dict[str, Any]) -> str:
         prompt = f"""
@@ -195,16 +153,10 @@ class LLMInsightGenerator:
         Give me 2 distinct, narrative paragraphs titled **Insight #1** and **Insight #2**.
         """
         
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": self._get_system_prompt("You are a Data Detective looking for anomalies.")},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=0.85,  # Higher temp for creativity
-            max_tokens=1000
+        return self.llm.generate_completion(
+            prompt=prompt,
+            system_prompt=self._get_system_prompt("You are a Data Detective looking for anomalies.")
         )
-        return response.choices[0].message.content.strip()
 
     def generate_recommendations(self, analysis_data: Dict[str, Any]) -> str:
         prompt = f"""
@@ -221,16 +173,10 @@ class LLMInsightGenerator:
         Format as a bulleted list (use - not numbers).
         """
         
-        response = self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": self._get_system_prompt("You are a Strategy Consultant (McKinsey/BCG style).")},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=self.temperature,
-            max_tokens=1200
+        return self.llm.generate_completion(
+            prompt=prompt,
+            system_prompt=self._get_system_prompt("You are a Strategy Consultant (McKinsey/BCG style).")
         )
-        return response.choices[0].message.content.strip()
 
     def generate_all_insights(self, analysis_data: Dict[str, Any]) -> Dict[str, str]:
         """Orchestrates the generation of all insights"""

@@ -15,7 +15,14 @@ matplotlib>=3.8.0
 seaborn>=0.13.0
 
 # LLM integration
+# Choose your provider and install accordingly:
+# For OpenAI (GPT-4 / GPT-3.5-turbo):
 openai>=1.0.0
+
+# For Google Gemini (Gemini 1.5 Pro / Flash):
+google-generativeai>=0.3.0
+
+# Environment configuration
 python-dotenv>=1.0.0
 
 # Report generation
