@@ -1,23 +1,36 @@
-# BMW Sales Data Analysis with LLM
+# BMW Sales Analysis - LLM-Powered Insights
 
-A comprehensive LLM-powered system for analyzing BMW sales data (2020-2024), generating visualizations, and producing automated business intelligence reports.
+[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+Production-grade BMW sales data analysis system powered by Large Language Models (OpenAI GPT-4 or Google Gemini). Generates comprehensive business insights, visualizations, and quality-assured reports with automated evaluation.
 
 ## 🎯 Features
 
+### Core Capabilities
 - **Automated Data Cleaning**: Removes duplicates, handles missing values, detects outliers
 - **Statistical Analysis**: Comprehensive analysis of sales trends, regional performance, model performance
-- **Data Visualization**: Professional charts and graphs using matplotlib and seaborn
-- **LLM-Powered Insights**: Supports both OpenAI (GPT-4/GPT-3.5-turbo) and Google Gemini (Pro/Flash) to generate executive summaries, strategic recommendations, and creative business insights
-- **Multi-Provider Support**: Flexible LLM provider configuration - choose based on quality, speed, and cost needs
-- **Role-Based Analysis**: Toggle between detailed analyst-level and executive-level strategic insights
-- **Automated Reporting**: Generates professional HTML and Markdown reports
-- **Reproducible**: Consistent report structure with minor variations due to LLM stochasticity
+- **Professional Visualizations**: High-quality charts using matplotlib and seaborn
+- **LLM-Powered Insights**: Supports OpenAI (GPT-4/GPT-3.5-turbo) and Google Gemini (2.5-flash/2.5-pro)
+- **Multi-Provider Support**: Flexible provider switching via configuration
+- **Role-Based Analysis**: Business Analyst (detailed) or Business Chief (strategic)
+- **Automated Reporting**: Professional HTML and Markdown reports with embedded visualizations
+
+### Production Features
+- **Quality Evaluation**: 5-dimension automated quality assessment (correctness, completeness, readability, data quality, insight quality)
+- **Comprehensive Logging**: Dual-handler system (DEBUG file logs + INFO console logs)
+- **Error Handling**: Graceful error handling with detailed stack traces
+- **Environment Validation**: API key and configuration validation
+- **Execution Monitoring**: Timing and performance tracking
+- **Modular Architecture**: Clean, well-documented, maintainable code
 
 ## 📋 Requirements
 
-- Python 3.12
+- Python 3.12 or higher
+- 8GB RAM minimum (16GB recommended)
 - LLM API Key (OpenAI or Google Gemini)
 - BMW sales data file: `data-bmw/BMW sales data (2020-2024).xlsx`
+- Internet connection for LLM API calls
 
 ## 🚀 Quick Start
 
@@ -27,7 +40,7 @@ A comprehensive LLM-powered system for analyzing BMW sales data (2020-2024), gen
 pip install -r requirements.txt
 ```
 
-### 2. Configure API Key
+### 2. Configure Environment
 
 Create a `.env` file in the project root:
 
@@ -35,259 +48,446 @@ Create a `.env` file in the project root:
 Copy-Item .env.example .env
 ```
 
-Edit `.env` and add your LLM API key:
+Edit `.env` and configure your settings:
 
-```
+```env
 # Choose your LLM provider
-LLM_PROVIDER=openai  # or 'gemini'
+LLM_PROVIDER=gemini  # Options: openai, gemini
 
 # If using OpenAI:
 OPENAI_API_KEY=your_openai_api_key_here
-OPENAI_MODEL=gpt-4
+OPENAI_MODEL=gpt-4  # Options: gpt-4, gpt-3.5-turbo
 
 # If using Google Gemini:
 GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-1.5-flash
+GEMINI_MODEL=gemini-2.5-flash  # Options: gemini-2.5-flash, gemini-2.5-pro
 
-LLM_TEMPERATURE=0.7
-ROLE=Business Analyst
+# Analysis Settings
+ROLE=Business Chief  # Options: Business Analyst, Business Chief
+LLM_TEMPERATURE=0.7  # Range: 0.0-1.0
+
 ```
 
-**Configuration Options:**
-
-**LLM Provider:**
-- `openai` - Use OpenAI GPT models (GPT-4 or GPT-3.5-turbo)
-- `gemini` - Use Google Gemini models (Gemini 1.5 Pro or Flash)
-
-**OpenAI Models** (when `LLM_PROVIDER=openai`):
-- `gpt-4`: Higher quality, ~$0.30-$0.60/report
-- `gpt-3.5-turbo`: Faster, cheaper, ~$0.03-$0.06/report
-
-**Gemini Models** (when `LLM_PROVIDER=gemini`):
-- `gemini-1.5-pro`: Best quality, balanced performance
-- `gemini-1.5-flash`: Fastest, most cost-effective, ~$0.01-$0.02/report
-
-**Other Options:**
-- **LLM_TEMPERATURE**: 0.0 (deterministic) to 1.0 (creative), recommended: 0.7
-- **ROLE**: Choose analysis depth
-  - `Business Analyst` (default): Detailed, comprehensive 4-5 paragraph analyses per section
-  - `Business Chief`: Executive-level strategic insights with BLUF structure, BCG Matrix, Pareto analysis
-
-### 3. Prepare Data
-
-Place your BMW sales data file in the `data-bmw` folder:
-- File name: `BMW sales data (2020-2024).xlsx`
-- Required columns: Model, Year, Region, Color, Fuel_Type, Transmission, Engine_Size_L, Mileage_KM, Price_USD, Sales_Volume
-
-### 4. Clean the Data
-
-```powershell
-python read_bmw_data.py
-```
-
-This will:
-- Load and validate the raw data
-- Remove duplicates and blank rows
-- Handle missing values
-- Remove outliers
-- Create derived features
-- Save cleaned data as: `data-bmw/BMW sales data (2020-2024) Cleaned.xlsx`
-
-### 5. Run the Analysis
+### 3. Run Analysis
 
 ```powershell
 python analyze_bmw_sales.py
 ```
 
-This will:
-1. Perform statistical analysis on cleaned data
-2. Generate 8 professional visualizations
-3. Use OpenAI GPT-4 to generate insights
-4. Create comprehensive HTML and Markdown reports
+This will execute 6 steps:
+1. **Environment Validation**: Check configuration and API keys
+2. **Data Loading**: Read and validate BMW sales data
+3. **Analysis & Visualization**: Generate charts and statistics
+4. **LLM Insights**: Generate business insights (7 categories)
+5. **Report Generation**: Create HTML and Markdown reports
+6. **Quality Evaluation**: Assess report quality
 
-## 📊 Output
+### 4. View Results
 
-The system generates the following outputs in the `reports/` directory:
+- **HTML Report**: `reports/bmw_analysis_report_YYYYMMDD_HHMMSS.html`
+- **Markdown Report**: `reports/bmw_analysis_report_YYYYMMDD_HHMMSS.md`
+- **Evaluation**: `reports/evaluations/evaluation_report_YYYYMMDD_HHMMSS.txt`
+- **Logs**: `logs/bmw_analysis_YYYYMMDD.log`
 
-### Reports
-- **BMW_Sales_Analysis_Report.html** - Interactive HTML report with embedded visualizations
-- **BMW_Sales_Analysis_Report.md** - Markdown version for documentation
+## 📊 Output Files
 
-### Visualizations
-1. `01_yearly_sales_trend.png` - Sales volume and average price over time
-2. `02_regional_performance.png` - Sales by region and market share
-3. `03_model_performance.png` - Model comparison with top performers highlighted
-4. `04_price_analysis.png` - Price distribution and price-sales relationship
-5. `05_fuel_type_trends.png` - Fuel type preferences over time
-6. `06_revenue_analysis.png` - Revenue breakdown (if revenue data available)
-7. `07_correlation_heatmap.png` - Correlation matrix of key metrics
-8. `08_model_category_performance.png` - Performance by model category
+### Reports Directory
+```
+reports/
+├── bmw_analysis_report_YYYYMMDD_HHMMSS.html    # Interactive HTML report
+├── bmw_analysis_report_YYYYMMDD_HHMMSS.md      # Markdown report
+└── evaluations/
+    ├── evaluation_YYYYMMDD_HHMMSS.json         # Evaluation data (machine-readable)
+    └── evaluation_report_YYYYMMDD_HHMMSS.txt   # Evaluation summary (human-readable)
+```
+
+### Logs Directory
+```
+logs/
+└── bmw_analysis_YYYYMMDD.log                   # Detailed execution log (DEBUG level)
+```
+
+### Visualizations (embedded in reports)
+1. Sales trends over time (line chart)
+2. Top models by sales (bar chart)
+3. Sales by region (horizontal bar chart)
+4. Price distribution (histogram)
+5. Correlation heatmap
+6. Monthly sales patterns
+
+## 🏆 Quality Evaluation
+
+### Evaluation Framework
+
+Reports are automatically evaluated across 5 dimensions:
+
+1. **Correctness (0-100)**
+   - Data consistency validation
+   - Section completeness
+   - Logical coherence
+   - No negative/invalid values
+
+2. **Completeness (0-100)**
+   - All 7 insight categories present
+   - Comprehensive coverage
+   - Regional and model analysis
+   - Correlation insights
+
+3. **Readability (0-100)**
+   - Proper file sizes (5KB-5MB)
+   - Valid HTML structure
+   - Clear formatting
+   - Chart presence
+
+4. **Data Quality (0-100)**
+   - Sufficient dataset size (>1000 records)
+   - Temporal coverage (≥2 years)
+   - Balanced distribution
+   - Valid value ranges
+
+5. **Insight Quality (0-100)**
+   - Adequate length (>200 characters)
+   - Specific numbers/percentages
+   - Actionable recommendations
+   - Strategic relevance
+
+### Scoring
+- **Overall Score**: Average of 5 dimensions (0-100)
+- **Letter Grades**: A (90+), B (80-89), C (70-79), D (60-69), F (<60)
+- **Target**: ≥70 (passing) across all dimensions
+
+### Example Evaluation Output
+```
+=== BMW Analysis Report Quality Evaluation ===
+
+Overall Score: 85/100 (Grade: B)
+
+Dimension Scores:
+✓ Correctness:   92/100
+✓ Completeness:  88/100
+✓ Readability:   90/100
+✓ Data Quality:  80/100
+✓ Insight Quality: 75/100
+
+Issues Found (3):
+- Insight length below 200 chars in sales_trends
+- Missing specific percentage in regional_analysis
+- Could include more actionable recommendations
+```
+
+## 📝 Logging
+
+### Log Configuration
+
+Dual-handler logging system:
+
+1. **File Logging** (DEBUG level)
+   - Location: `logs/bmw_analysis_YYYYMMDD.log`
+   - Detailed execution traces
+   - Function entry/exit tracking
+   - Exception stack traces
+
+2. **Console Logging** (INFO level)
+   - Step-by-step progress
+   - Key milestones
+   - Error summaries
+   - Final results
+
+### Viewing Logs
+
+```powershell
+# View latest log
+Get-Content logs\bmw_analysis_*.log | Select-Object -Last 50
+
+# Search for errors
+Select-String -Path logs\*.log -Pattern "ERROR"
+```
 
 ## 📈 Analysis Sections
 
-The generated report includes:
+The generated reports include 7 comprehensive insight categories:
 
-1. **Executive Summary** - High-level overview of key findings
-2. **Key Performance Metrics** - Critical business metrics dashboard
-3. **Yearly Sales Trends** - Performance trends from 2020-2024
-4. **Regional Performance Analysis** - Top and underperforming markets
-5. **Model Performance Analysis** - Product portfolio insights
-6. **Price Drivers and Market Dynamics** - Price elasticity and sales drivers
-7. **Creative Business Insights** - Unexpected patterns and opportunities
-8. **Strategic Recommendations** - Actionable business recommendations
+1. **Sales Trends** - Patterns, seasonality, growth rates
+2. **Model Performance** - Best/worst performers, market share
+3. **Regional Analysis** - Geographic patterns, opportunities
+4. **Price Analysis** - Pricing strategy, elasticity
+5. **Customer Insights** - Demographics, preferences
+6. **Recommendations** - Actionable business suggestions
+7. **Overall Summary** - Executive overview
 
 ## 🏗️ Project Structure
 
 ```
 data-science-bmw-llm/
 ├── data-bmw/
-│   ├── BMW sales data (2020-2024).xlsx          # Raw data (you provide)
+│   ├── BMW sales data (2020-2024).xlsx          # Raw data
 │   └── BMW sales data (2020-2024) Cleaned.xlsx  # Cleaned data (generated)
-├── reports/                                       # Generated reports and charts
-├── read_bmw_data.py                              # Data cleaning script
-├── analyze_bmw_sales.py                          # Main analysis orchestrator
-├── data_analyzer.py                              # Statistical analysis module
-├── visualizer.py                                 # Visualization generation module
-├── llm_insights.py                               # OpenAI LLM integration module
-├── report_generator.py                           # Report generation module
-├── requirements.txt                              # Python dependencies
-├── .env.example                                  # Environment variable template
-├── .env                                          # Your API keys (not tracked)
+├── reports/                                       # Generated reports
+│   └── evaluations/                               # Quality evaluations
+├── logs/                                          # Execution logs
+├── analyze_bmw_sales.py                          # Main orchestrator
+├── read_bmw_data.py                              # Data cleaning
+├── llm_provider.py                               # Multi-provider abstraction
+├── llm_insights.py                               # Business Analyst insights
+├── llm_insights_executive.py                     # Executive insights
+├── generate_html_report.py                       # HTML report generation
+├── generate_markdown_report.py                   # Markdown report generation
+├── logger_config.py                              # Logging configuration
+├── report_evaluator.py                           # Quality evaluation
+├── requirements.txt                              # Dependencies
+├── .env                                          # Your configuration (not tracked)
+├── .env.example                                  # Configuration template
 └── README.md                                     # This file
 ```
 
-## 🔧 Module Details
+## 🔧 Core Modules
 
-### read_bmw_data.py
-Loads raw data and performs comprehensive cleaning:
-- Removes blank rows and duplicates
-- Handles missing values (drop or fill based on column type)
-- Removes outliers using IQR method (3×IQR)
-- Validates data ranges (years 2020-2024, positive prices/sales, engine size 1.5-5.0L)
-- Creates derived features (Total_Revenue, Price_Category, Model_Category, Mileage_Category)
-- Standardizes text data (strip whitespace, consistent casing)
+### analyze_bmw_sales.py
+Main orchestration script with 6 steps:
+1. Environment validation
+2. Data loading
+3. Analysis and visualization
+4. LLM insight generation
+5. Report generation
+6. Quality evaluation
 
-### data_analyzer.py
-Performs statistical analysis:
-- Overview metrics (total sales, average price, etc.)
-- Yearly trends and year-over-year growth
-- Regional performance and market share
-- Model performance and portfolio analysis
-- Price segment analysis and elasticity
-- Fuel type and transmission trends
-- Revenue analysis (if available)
-- Correlation analysis
+### llm_provider.py
+Multi-provider abstraction layer:
+- Supports OpenAI (GPT-4, GPT-3.5-turbo)
+- Supports Google Gemini (2.5-flash, 2.5-pro)
+- Unified interface for both providers
+- Dynamic provider switching via configuration
 
-### visualizer.py
-Generates professional visualizations:
-- Line charts for trends over time
-- Bar charts for comparisons
-- Pie charts for market share
-- Scatter plots for relationships
-- Heatmaps for correlations
-- Customized color schemes and annotations
+### logger_config.py
+Centralized logging configuration:
+- Dual-handler system (file DEBUG + console INFO)
+- Daily log rotation
+- Function call decorator
+- Prevents duplicate handlers
 
-### llm_insights.py
-Integrates with OpenAI API to generate:
-- Executive summary (3-4 paragraphs)
-- Detailed analysis of yearly trends (4-5 paragraphs)
-- Regional performance insights (4-5 paragraphs)
-- Model performance analysis (4-5 paragraphs)
-- Price drivers and key factors (4-5 paragraphs)
-- Creative business insights (2 unique insights)
-- Strategic recommendations (5-7 actionable items)
+### report_evaluator.py
+Quality evaluation framework:
+- 5-dimension scoring system
+- JSON and text report generation
+- Issue tracking and recommendations
+- Letter grade assignment
 
-### report_generator.py
-Creates comprehensive reports:
-- Professional HTML report with embedded CSS
-- Markdown report for documentation
-- Combines statistical data, visualizations, and LLM insights
-- Structured sections with table of contents
-- Responsive design for HTML
+## 🎨 Model Selection Guide
 
-## 🎨 LLM Configuration
+### OpenAI Models
 
-The system supports multiple LLM providers with flexible configuration:
+**GPT-4**
+- **Best for**: Highest quality insights, complex analysis
+- **Speed**: ~30-60 seconds per report
+- **Cost**: ~$0.30-$0.60 per report
+- **Use when**: Quality is priority, budget allows
 
-### Supported Providers
-- **OpenAI**: GPT-4, GPT-3.5-turbo
-- **Google Gemini**: Gemini 1.5 Pro, Gemini 1.5 Flash
+**GPT-3.5-turbo**
+- **Best for**: Good quality, faster turnaround
+- **Speed**: ~15-30 seconds per report  
+- **Cost**: ~$0.03-$0.06 per report
+- **Use when**: Need speed, cost efficiency
 
-### Analysis Modes
-- **Business Analyst**: Detailed 4-5 paragraph analyses
-- **Business Chief**: Executive BLUF-style strategic insights
+### Gemini Models
 
-**For detailed provider comparison, costs, and switching instructions, see [LLM_PROVIDER_GUIDE.md](LLM_PROVIDER_GUIDE.md)**
+**gemini-2.5-flash** (Recommended)
+- **Best for**: Cost-effective, fast analysis
+- **Speed**: ~10-20 seconds per report
+- **Cost**: ~$0.01-$0.02 per report
+- **Use when**: High volume, budget conscious
 
-### LLM Guidance
-The LLM is specifically guided to:
+**gemini-2.5-pro**
+- **Best for**: High quality at lower cost than GPT-4
+- **Speed**: ~20-40 seconds per report
+- **Cost**: ~$0.05-$0.10 per report
+- **Use when**: Balance quality and cost
 
-1. **Identify sales performance trends** - Analyze patterns over time and across regions
-2. **Highlight top/underperforming models and markets** - Compare performance metrics
-3. **Explore key sales drivers** - Price, market segment, model type, fuel type
-4. **Generate creative insights** - Unexpected patterns, cross-market opportunities
-5. **Provide business understanding** - Strategic recommendations with business impact
+## 🔧 Configuration Options
+
+### Analysis Role
+
+**Business Analyst** (detailed, technical)
+- 4-5 paragraph analyses per section
+- Detailed metrics and statistics
+- Technical terminology
+- Comprehensive coverage
+
+**Business Chief** (strategic, executive)
+- BLUF (Bottom Line Up Front) structure
+- Strategic insights and frameworks
+- BCG Matrix, Pareto analysis
+- High-level recommendations
+
+### Temperature Setting
+
+- **0.0-0.3**: Deterministic, consistent, factual
+- **0.4-0.7**: Balanced (recommended for business)
+- **0.8-1.0**: Creative, exploratory, varied
 
 ## 🔒 Security
 
-- Never commit your `.env` file with API keys
-- `.gitignore` is configured to exclude sensitive files
-- API keys are loaded from environment variables only
-
-## 📝 Notes
-
-- The LLM temperature is set to 0.7 for balanced creativity and consistency
-- Reports are reproducible with minor variations due to LLM stochasticity
-- Report structure and coverage remain consistent across runs
-- Visualizations are deterministic and always identical
+- Never commit `.env` file with API keys
+- `.gitignore` configured to exclude sensitive files
+- API keys loaded from environment variables only
+- Validate API keys before use (no placeholder text)
 
 ## 🆘 Troubleshooting
 
-### Error: "API key not found"
-- Ensure `.env` file exists in project root
-- Check the correct API key variable is set:
-  - OpenAI: `OPENAI_API_KEY=your_key_here`
-  - Gemini: `GEMINI_API_KEY=your_key_here`
-- Verify `LLM_PROVIDER` matches your configured provider
+### Common Issues
 
-### Error: "Unsupported LLM_PROVIDER"
-- Set `LLM_PROVIDER=openai` or `LLM_PROVIDER=gemini` (lowercase)
+**Error: "API key not found"**
+```powershell
+# Check .env file exists
+Test-Path .env
 
-### Error: "File not found"
-- Ensure data file is named exactly: `BMW sales data (2020-2024).xlsx`
-- Check file is in `data-bmw/` directory
-- Run `read_bmw_data.py` before `analyze_bmw_sales.py`
+# Verify API key format
+Get-Content .env | Select-String "API_KEY"
 
-### Error: "Module not found"
-- Run: `pip install -r requirements.txt`
-- For specific providers:
-  - OpenAI: `pip install openai>=1.0.0`
-  - Gemini: `pip install google-generativeai>=0.3.0`
-- Ensure you're using Python 3.12
+# Ensure no placeholder text
+Get-Content .env | Select-String "your_"
+```
 
-### LLM API Errors
-- Verify your API key is valid and active
-- Check you have available credits/quota
-- Ensure internet connection is working
-- OpenAI rate limits: Consider using GPT-3.5-turbo or wait
-- Gemini rate limits: Check quota in Google Cloud Console
+**Error: "google-generativeai package not installed"**
+```powershell
+pip install google-generativeai>=0.3.0
+python -c "import google.generativeai; print('OK')"
+```
 
-**For more provider-specific troubleshooting, see [LLM_PROVIDER_GUIDE.md](LLM_PROVIDER_GUIDE.md)**
+**Error: "404 Model not found" (Gemini)**
+```env
+# Update to correct model name in .env
+# OLD: GEMINI_MODEL=gemini-1.5-flash
+# NEW: GEMINI_MODEL=gemini-2.5-flash
+```
 
-## 💡 Alternative: Using Google Gemini (Free)
+**Error: "File not found"**
+```powershell
+# Verify data file location
+Test-Path "data-bmw\BMW sales data (2020-2024).xlsx"
 
-If you prefer to use Google's Gemini API (free quota available):
+# Run data cleaning first
+python read_bmw_data.py
+```
 
-1. Get a free API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Modify `llm_insights.py` to use Google's Gemini API instead of OpenAI
-3. Update `.env` with `GEMINI_API_KEY=your_key_here`
+**Error: "Module not found"**
+```powershell
+# Reinstall all dependencies
+pip install -r requirements.txt --upgrade
 
-## 📞 Support
+# Verify Python version
+python --version  # Should be 3.12+
+```
 
-For issues or questions:
-1. Check the troubleshooting section above
-2. Verify all requirements are installed
-3. Ensure data format matches expected structure
+**Low Evaluation Scores**
+```powershell
+# Review evaluation report
+Get-Content reports\evaluations\evaluation_report_*.txt
+
+# Common fixes:
+# - Ensure sufficient data (>1000 records, 2+ years)
+# - Verify all 7 insight sections generated
+# - Check for negative or invalid values
+# - Review logs for LLM API errors
+```
+
+### Debug Mode
+
+Enable detailed console logging:
+```python
+# In logger_config.py, change console handler level
+console_handler.setLevel(logging.DEBUG)
+```
+
+### Getting Help
+
+1. **Check logs**: `logs/bmw_analysis_YYYYMMDD.log`
+2. **Review evaluation**: `reports/evaluations/`
+3. **Consult documentation**: See below
+4. **GitHub Issues**: Report bugs or request features
+
+## 📚 Documentation
+
+### Complete Documentation Set
+- **[README.md](README.md)** (this file): Overview and quick start
+- **[PRODUCTION_GUIDE.md](PRODUCTION_GUIDE.md)**: Deployment, monitoring, maintenance
+- **[LLM_PROVIDER_GUIDE.md](LLM_PROVIDER_GUIDE.md)**: Multi-provider architecture details
+- **[GEMINI_IMPLEMENTATION.md](GEMINI_IMPLEMENTATION.md)**: Gemini integration specifics
+- **[QUICK_START_LLM.md](QUICK_START_LLM.md)**: LLM setup and configuration
+
+### Additional Resources
+- Code contains comprehensive docstrings
+- Example configurations in `.env.example`
+- Evaluation framework in `report_evaluator.py`
+
+## 🤝 Contributing
+
+### Development Setup
+```powershell
+# Clone repository
+git clone https://github.com/timothyho12321/data-science-bmw-llm.git
+cd data-science-bmw-llm
+
+# Create virtual environment
+python -m venv venv
+venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### Code Style
+- Follow PEP 8 guidelines
+- Use type hints for function parameters
+- Write comprehensive docstrings
+- Use logging instead of print statements
+- Include error handling with try-except
+
+### Submitting Changes
+1. Fork the repository
+2. Create feature branch: `git checkout -b feature/your-feature`
+3. Commit changes: `git commit -m "Add feature"`
+4. Push to branch: `git push origin feature/your-feature`
+5. Open Pull Request with description
+
+## 📄 License
+
+MIT License - see LICENSE file for details
+
+## 🙏 Acknowledgments
+
+- **OpenAI**: GPT models for natural language insights
+- **Google**: Gemini models for cost-effective analysis  
+- **Python Community**: Excellent data science libraries (pandas, matplotlib, seaborn)
+
+## 📞 Contact
+
+- **GitHub**: [@timothyho12321](https://github.com/timothyho12321)
+- **Issues**: [GitHub Issues](https://github.com/timothyho12321/data-science-bmw-llm/issues)
+
+## 🗺️ Roadmap
+
+### Planned Features
+- [ ] Automated scheduling for batch processing
+- [ ] REST API for on-demand analysis
+- [ ] Real-time monitoring dashboard
+- [ ] Multi-language report generation
+- [ ] Advanced forecasting models (ARIMA, Prophet)
+- [ ] Custom evaluation criteria configuration
+- [ ] Report comparison across time periods
+- [ ] Cloud deployment templates (AWS, GCP, Azure)
+
+### Recent Updates
+- **v1.0.0** (2024-01): Production-grade release
+  - Multi-provider LLM support (OpenAI + Gemini)
+  - Quality evaluation framework (5 dimensions)
+  - Comprehensive logging (DEBUG file + INFO console)
+  - Production documentation and deployment guide
+  - Environment validation and error handling
+
+---
+
+**Built with ❤️ for data-driven business insights**
+
 
 ## 📄 License
 
