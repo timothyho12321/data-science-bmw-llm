@@ -408,11 +408,10 @@ console_handler.setLevel(logging.DEBUG)
 ## 📚 Documentation
 
 ### Complete Documentation Set
-- **[README.md](README.md)** (this file): Overview and quick start
-- **[PRODUCTION_GUIDE.md](PRODUCTION_GUIDE.md)**: Deployment, monitoring, maintenance
-- **[LLM_PROVIDER_GUIDE.md](LLM_PROVIDER_GUIDE.md)**: Multi-provider architecture details
-- **[GEMINI_IMPLEMENTATION.md](GEMINI_IMPLEMENTATION.md)**: Gemini integration specifics
-- **[QUICK_START_LLM.md](QUICK_START_LLM.md)**: LLM setup and configuration
+- **[README.md](README.md)** (this file): System overview, features, and usage guide
+- **[ARCHITECTURE.md](ARCHITECTURE.md)**: System architecture and data flow diagrams
+- **[PRODUCTION.md](PRODUCTION.md)**: Production deployment, monitoring, and maintenance
+- **[SUPPLEMENTARY_INFO.md](SUPPLEMENTARY_INFO.md)**: Quick reference, troubleshooting, and additional tips
 
 ### Additional Resources
 - Code contains comprehensive docstrings
@@ -487,12 +486,3 @@ MIT License - see LICENSE file for details
 ---
 
 **Built with ❤️ for data-driven business insights**
-
-
-## 📄 License
-
-This project is for educational and development purposes.
-
----
-
-**Built with Python, OpenAI GPT-4, and Data Science Best Practices**
