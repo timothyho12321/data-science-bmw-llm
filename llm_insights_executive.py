@@ -12,9 +12,10 @@ import json
 # Load environment variables
 load_dotenv()
 
+
 class LLMInsightGenerator:
     """Generates high-level strategic insights using LLM (OpenAI or Gemini)"""
-    
+
     def __init__(self):
         """Initialize LLM provider"""
         self.llm = LLMProvider()
@@ -47,10 +48,12 @@ class LLMInsightGenerator:
 
         Keep it under 250 words. Punchy and authoritative.
         """
-        
+
         return self.llm.generate_completion(
             prompt=prompt,
-            system_prompt=self._get_system_prompt("You are a C-level Executive assistant.")
+            system_prompt=self._get_system_prompt(
+                "You are a C-level Executive assistant."
+            ),
         )
 
     def analyze_yearly_trends(self, analysis_data: Dict[str, Any]) -> str:
@@ -69,10 +72,12 @@ class LLMInsightGenerator:
 
         Format as 3 distinct paragraphs using professional financial terminology.
         """
-        
+
         return self.llm.generate_completion(
             prompt=prompt,
-            system_prompt=self._get_system_prompt("You are a Financial Planning & Analysis (FP&A) Manager.")
+            system_prompt=self._get_system_prompt(
+                "You are a Financial Planning & Analysis (FP&A) Manager."
+            ),
         )
 
     def analyze_regional_performance(self, analysis_data: Dict[str, Any]) -> str:
@@ -89,10 +94,12 @@ class LLMInsightGenerator:
         
         Provide a strategic recommendation for the underperforming regions: Exit, Invest, or Pivot?
         """
-        
+
         return self.llm.generate_completion(
             prompt=prompt,
-            system_prompt=self._get_system_prompt("You are a Chief Commercial Officer (CCO) focusing on geographic strategy.")
+            system_prompt=self._get_system_prompt(
+                "You are a Chief Commercial Officer (CCO) focusing on geographic strategy."
+            ),
         )
 
     def analyze_model_performance(self, analysis_data: Dict[str, Any]) -> str:
@@ -110,10 +117,12 @@ class LLMInsightGenerator:
         
         Be specific: "The X5 outperforms the 3-series by Y%..."
         """
-        
+
         return self.llm.generate_completion(
             prompt=prompt,
-            system_prompt=self._get_system_prompt("You are a Product Portfolio Manager.")
+            system_prompt=self._get_system_prompt(
+                "You are a Product Portfolio Manager."
+            ),
         )
 
     def analyze_price_drivers(self, analysis_data: Dict[str, Any]) -> str:
@@ -132,10 +141,10 @@ class LLMInsightGenerator:
 
         Focus on the economics of the sales.
         """
-        
+
         return self.llm.generate_completion(
             prompt=prompt,
-            system_prompt=self._get_system_prompt("You are a Pricing Economist.")
+            system_prompt=self._get_system_prompt("You are a Pricing Economist."),
         )
 
     def generate_creative_insights(self, analysis_data: Dict[str, Any]) -> str:
@@ -152,10 +161,12 @@ class LLMInsightGenerator:
 
         Give me 2 distinct, narrative paragraphs titled **Insight #1** and **Insight #2**.
         """
-        
+
         return self.llm.generate_completion(
             prompt=prompt,
-            system_prompt=self._get_system_prompt("You are a Data Detective looking for anomalies.")
+            system_prompt=self._get_system_prompt(
+                "You are a Data Detective looking for anomalies."
+            ),
         )
 
     def generate_recommendations(self, analysis_data: Dict[str, Any]) -> str:
@@ -172,26 +183,28 @@ class LLMInsightGenerator:
 
         Format as a bulleted list (use - not numbers).
         """
-        
+
         return self.llm.generate_completion(
             prompt=prompt,
-            system_prompt=self._get_system_prompt("You are a Strategy Consultant (McKinsey/BCG style).")
+            system_prompt=self._get_system_prompt(
+                "You are a Strategy Consultant (McKinsey/BCG style)."
+            ),
         )
 
     def generate_all_insights(self, analysis_data: Dict[str, Any]) -> Dict[str, str]:
         """Orchestrates the generation of all insights"""
         print("Generating LLM insights (Executive Level)...")
-        
+
         insights = {}
         # Execute sequentially (could be parallelized for speed, but sequential allows easier debugging)
         stages = [
-            ('executive_summary', self.generate_executive_summary),
-            ('yearly_analysis', self.analyze_yearly_trends),
-            ('regional_analysis', self.analyze_regional_performance),
-            ('model_analysis', self.analyze_model_performance),
-            ('drivers_analysis', self.analyze_price_drivers),
-            ('creative_insights', self.generate_creative_insights),
-            ('recommendations', self.generate_recommendations)
+            ("executive_summary", self.generate_executive_summary),
+            ("yearly_analysis", self.analyze_yearly_trends),
+            ("regional_analysis", self.analyze_regional_performance),
+            ("model_analysis", self.analyze_model_performance),
+            ("drivers_analysis", self.analyze_price_drivers),
+            ("creative_insights", self.generate_creative_insights),
+            ("recommendations", self.generate_recommendations),
         ]
 
         for key, func in stages:

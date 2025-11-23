@@ -23,6 +23,10 @@ Production-grade BMW sales data analysis system powered by Large Language Models
 - **Environment Validation**: API key and configuration validation
 - **Execution Monitoring**: Timing and performance tracking
 - **Modular Architecture**: Clean, well-documented, maintainable code
+- **Test Suite**: >80% code coverage with unit and integration tests
+- **Docker Support**: Containerized deployment for consistency
+- **CI/CD Pipeline**: Automated testing and validation with GitHub Actions
+- **Code Quality**: Black formatting, flake8 linting, type hints
 
 ## 📋 Requirements
 
@@ -33,6 +37,17 @@ Production-grade BMW sales data analysis system powered by Large Language Models
 - Internet connection for LLM API calls
 
 ## 🚀 Quick Start
+
+### Option 1: Docker (Recommended)
+
+```bash
+# Build and run
+docker-compose up bmw-analysis
+
+# View reports in reports/ directory
+```
+
+### Option 2: Local Installation
 
 ### 1. Install Dependencies
 
@@ -215,6 +230,44 @@ The generated reports include 7 comprehensive insight categories:
 6. **Recommendations** - Actionable business suggestions
 7. **Overall Summary** - Executive overview
 
+## 🧪 Testing
+
+### Run Tests
+
+```powershell
+# All tests with coverage
+pytest --cov=. --cov-report=html
+
+# Or use Makefile
+make test
+```
+
+### Code Quality
+
+```powershell
+# Linting
+make lint
+
+# Code formatting
+make format
+```
+
+See [TESTING.md](TESTING.md) for complete testing guide.
+
+## 🐳 Docker Deployment
+
+### Quick Start
+
+```powershell
+# Build image
+docker build -t bmw-sales-analysis:latest .
+
+# Run with docker-compose
+docker-compose up bmw-analysis
+```
+
+See [DOCKER.md](DOCKER.md) for complete Docker guide.
+
 ## 🏗️ Project Structure
 
 ```
@@ -225,6 +278,10 @@ data-science-bmw-llm/
 ├── reports/                                       # Generated reports
 │   └── evaluations/                               # Quality evaluations
 ├── logs/                                          # Execution logs
+├── tests/                                         # Test suite
+│   ├── test_data_analyzer.py
+│   ├── test_llm_provider.py
+│   └── test_report_evaluator.py
 ├── analyze_bmw_sales.py                          # Main orchestrator
 ├── read_bmw_data.py                              # Data cleaning
 ├── llm_provider.py                               # Multi-provider abstraction
@@ -234,7 +291,13 @@ data-science-bmw-llm/
 ├── generate_markdown_report.py                   # Markdown report generation
 ├── logger_config.py                              # Logging configuration
 ├── report_evaluator.py                           # Quality evaluation
-├── requirements.txt                              # Dependencies
+├── Dockerfile                                     # Docker container definition
+├── docker-compose.yml                             # Docker orchestration
+├── Makefile                                       # Build automation
+├── setup.py                                       # Package configuration
+├── pytest.ini                                     # Test configuration
+├── requirements.txt                               # Dependencies
+├── requirements-dev.txt                           # Development dependencies
 ├── .env                                          # Your configuration (not tracked)
 ├── .env.example                                  # Configuration template
 └── README.md                                     # This file
@@ -411,12 +474,15 @@ console_handler.setLevel(logging.DEBUG)
 - **[README.md](README.md)** (this file): System overview, features, and usage guide
 - **[ARCHITECTURE.md](ARCHITECTURE.md)**: System architecture and data flow diagrams
 - **[PRODUCTION.md](PRODUCTION.md)**: Production deployment, monitoring, and maintenance
+- **[DOCKER.md](DOCKER.md)**: Docker containerization and deployment guide
+- **[TESTING.md](TESTING.md)**: Testing strategy and procedures
 - **[SUPPLEMENTARY_INFO.md](SUPPLEMENTARY_INFO.md)**: Quick reference, troubleshooting, and additional tips
 
 ### Additional Resources
 - Code contains comprehensive docstrings
 - Example configurations in `.env.example`
 - Evaluation framework in `report_evaluator.py`
+- CI/CD pipeline in `.github/workflows/ci.yml`
 
 ## 🤝 Contributing
 
@@ -432,6 +498,10 @@ venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
+pip install -r requirements-dev.txt
+
+# Run tests
+make test
 ```
 
 ### Code Style
@@ -440,6 +510,18 @@ pip install -r requirements.txt
 - Write comprehensive docstrings
 - Use logging instead of print statements
 - Include error handling with try-except
+- Maintain >80% test coverage
+
+### Pre-commit Checks
+```powershell
+# Install pre-commit hooks
+pip install pre-commit
+pre-commit install
+
+# Run manually
+make lint
+make test
+```
 
 ### Submitting Changes
 1. Fork the repository
@@ -480,6 +562,10 @@ MIT License - see LICENSE file for details
   - Multi-provider LLM support (OpenAI + Gemini)
   - Quality evaluation framework (5 dimensions)
   - Comprehensive logging (DEBUG file + INFO console)
+  - Test suite with >80% coverage
+  - Docker containerization
+  - CI/CD pipeline with GitHub Actions
+  - Code quality tools and automation
   - Production documentation and deployment guide
   - Environment validation and error handling
 

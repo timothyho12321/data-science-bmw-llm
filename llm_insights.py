@@ -15,20 +15,20 @@ load_dotenv()
 
 class LLMInsightGenerator:
     """Generates insights and narratives using LLM (OpenAI or Gemini)"""
-    
+
     def __init__(self):
         """Initialize LLM provider"""
         self.llm = LLMProvider()
-    
+
     def generate_executive_summary(self, analysis_data: Dict[str, Any]) -> str:
         """
         Generate executive summary from analysis data
-        
+
         Parameters:
         -----------
         analysis_data : dict
             Dictionary containing all analysis insights
-            
+
         Returns:
         --------
         str : Executive summary text
@@ -50,21 +50,21 @@ Your executive summary should:
 
 Write in a professional, confident tone. Focus on insights, not just facts.
 """
-        
+
         return self.llm.generate_completion(
             prompt=prompt,
-            system_prompt="You are an expert business analyst specializing in automotive sales data."
+            system_prompt="You are an expert business analyst specializing in automotive sales data.",
         ).strip()
-    
+
     def analyze_yearly_trends(self, analysis_data: Dict[str, Any]) -> str:
         """
         Generate detailed analysis of yearly trends
-        
+
         Parameters:
         -----------
         analysis_data : dict
             Dictionary containing yearly trends data
-            
+
         Returns:
         --------
         str : Yearly trends analysis
@@ -89,21 +89,21 @@ Your analysis should:
 
 Be analytical and insightful. Use specific numbers and percentages. Write 4-5 paragraphs.
 """
-        
+
         return self.llm.generate_completion(
             prompt=prompt,
-            system_prompt="You are an expert automotive industry analyst."
+            system_prompt="You are an expert automotive industry analyst.",
         )
-    
+
     def analyze_regional_performance(self, analysis_data: Dict[str, Any]) -> str:
         """
         Generate analysis of regional market performance
-        
+
         Parameters:
         -----------
         analysis_data : dict
             Dictionary containing regional performance data
-            
+
         Returns:
         --------
         str : Regional analysis
@@ -125,21 +125,21 @@ Your analysis should:
 
 Be specific with numbers and percentages. Write 4-5 paragraphs with actionable insights.
 """
-        
+
         return self.llm.generate_completion(
             prompt=prompt,
-            system_prompt="You are an expert in global automotive market analysis."
+            system_prompt="You are an expert in global automotive market analysis.",
         )
-    
+
     def analyze_model_performance(self, analysis_data: Dict[str, Any]) -> str:
         """
         Generate analysis of model/product performance
-        
+
         Parameters:
         -----------
         analysis_data : dict
             Dictionary containing model performance data
-            
+
         Returns:
         --------
         str : Model analysis
@@ -161,21 +161,21 @@ Your analysis should:
 
 Provide strategic insights about product portfolio management. Write 4-5 paragraphs.
 """
-        
+
         return self.llm.generate_completion(
             prompt=prompt,
-            system_prompt="You are an expert automotive product strategist."
+            system_prompt="You are an expert automotive product strategist.",
         )
-    
+
     def analyze_price_drivers(self, analysis_data: Dict[str, Any]) -> str:
         """
         Analyze key drivers of sales including price
-        
+
         Parameters:
         -----------
         analysis_data : dict
             Dictionary containing price and correlation analysis
-            
+
         Returns:
         --------
         str : Price and drivers analysis
@@ -203,21 +203,21 @@ Your analysis should:
 
 Be analytical and data-driven. Write 4-5 paragraphs with strategic recommendations.
 """
-        
+
         return self.llm.generate_completion(
             prompt=prompt,
-            system_prompt="You are an expert in pricing strategy and market analysis."
+            system_prompt="You are an expert in pricing strategy and market analysis.",
         )
-    
+
     def generate_creative_insights(self, analysis_data: Dict[str, Any]) -> str:
         """
         Generate 1-2 creative insights demonstrating business understanding
-        
+
         Parameters:
         -----------
         analysis_data : dict
             Complete analysis data
-            
+
         Returns:
         --------
         str : Creative insights
@@ -245,21 +245,21 @@ Examples of creative insights might include:
 
 Provide 2 distinct, creative insights. Write 3-4 paragraphs total.
 """
-        
+
         return self.llm.generate_completion(
             prompt=prompt,
-            system_prompt="You are a creative strategic business consultant with deep automotive industry expertise."
+            system_prompt="You are a creative strategic business consultant with deep automotive industry expertise.",
         )
-    
+
     def generate_recommendations(self, analysis_data: Dict[str, Any]) -> str:
         """
         Generate strategic recommendations based on all insights
-        
+
         Parameters:
         -----------
         analysis_data : dict
             Complete analysis data
-            
+
         Returns:
         --------
         str : Strategic recommendations
@@ -281,50 +281,50 @@ Your recommendations should:
 
 Format as a numbered list with each recommendation being 2-3 sentences explaining the what, why, and expected impact.
 """
-        
+
         return self.llm.generate_completion(
             prompt=prompt,
-            system_prompt="You are a senior executive providing strategic direction."
+            system_prompt="You are a senior executive providing strategic direction.",
         )
-    
+
     def generate_all_insights(self, analysis_data: Dict[str, Any]) -> Dict[str, str]:
         """
         Generate all LLM-powered insights
-        
+
         Parameters:
         -----------
         analysis_data : dict
             Complete analysis data from BMWDataAnalyzer
-            
+
         Returns:
         --------
         Dict containing all generated insights
         """
         print("Generating LLM insights...")
-        
+
         insights = {}
-        
+
         print("  - Generating executive summary...")
-        insights['executive_summary'] = self.generate_executive_summary(analysis_data)
-        
+        insights["executive_summary"] = self.generate_executive_summary(analysis_data)
+
         print("  - Analyzing yearly trends...")
-        insights['yearly_analysis'] = self.analyze_yearly_trends(analysis_data)
-        
+        insights["yearly_analysis"] = self.analyze_yearly_trends(analysis_data)
+
         print("  - Analyzing regional performance...")
-        insights['regional_analysis'] = self.analyze_regional_performance(analysis_data)
-        
+        insights["regional_analysis"] = self.analyze_regional_performance(analysis_data)
+
         print("  - Analyzing model performance...")
-        insights['model_analysis'] = self.analyze_model_performance(analysis_data)
-        
+        insights["model_analysis"] = self.analyze_model_performance(analysis_data)
+
         print("  - Analyzing price drivers...")
-        insights['drivers_analysis'] = self.analyze_price_drivers(analysis_data)
-        
+        insights["drivers_analysis"] = self.analyze_price_drivers(analysis_data)
+
         print("  - Generating creative insights...")
-        insights['creative_insights'] = self.generate_creative_insights(analysis_data)
-        
+        insights["creative_insights"] = self.generate_creative_insights(analysis_data)
+
         print("  - Generating recommendations...")
-        insights['recommendations'] = self.generate_recommendations(analysis_data)
-        
+        insights["recommendations"] = self.generate_recommendations(analysis_data)
+
         print("✓ LLM insights generation complete!")
-        
+
         return insights

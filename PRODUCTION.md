@@ -3,6 +3,15 @@
 ## Overview
 This guide covers deploying the BMW Sales Analysis system in a production environment with best practices for reliability, monitoring, and maintenance.
 
+**Production-Ready Features:**
+- ✅ Comprehensive test suite with >80% coverage
+- ✅ Docker containerization for consistent deployment
+- ✅ CI/CD pipeline with GitHub Actions
+- ✅ Dependency management with setup.py
+- ✅ Code quality tools (black, flake8, pylint)
+- ✅ Structured logging and monitoring
+- ✅ Automated quality evaluation
+
 ## System Requirements
 
 ### Hardware
@@ -40,13 +49,45 @@ cp .env.example .env
 - [ ] Ensure data path is accessible
 
 ### 4. Dependency Installation
+
+**Option A: Using pip**
 ```bash
-# Install all required packages
+# Production dependencies
 pip install -r requirements.txt
+
+# Development dependencies (includes testing, linting)
+pip install -r requirements-dev.txt
 
 # Verify installations
 python -c "import pandas, openai, google.generativeai; print('OK')"
 ```
+
+**Option B: Using setup.py**
+```bash
+# Install as package
+pip install -e .
+
+# With development dependencies
+pip install -e ".[dev]"
+```
+
+## Deployment Options
+
+### Option 1: Docker Deployment (Recommended)
+
+See [DOCKER.md](DOCKER.md) for complete Docker deployment guide.
+
+**Quick Start:**
+```bash
+# Build image
+# docker build -t bmw-sales-analysis:latest .
+docker compose up --build -d
+# Run with docker-compose
+# docker-compose up bmw-analysis
+docker compose exec bmw-analysis-dev bash
+```
+
+### Option 2: Traditional Deployment
 
 ## Deployment Steps
 
@@ -152,12 +193,40 @@ Current implementation runs sequentially. For optimization:
 ## Quality Assurance
 
 ### Automated Testing
+
+See [TESTING.md](TESTING.md) for complete testing guide.
+
+**Run Tests:**
 ```bash
-# Run report evaluation
+# All tests with coverage
+pytest --cov=. --cov-report=html --cov-report=term-missing
+
+# Quick test run
+make test
+
+# Specific test file
+pytest tests/test_data_analyzer.py -v
+```
+
+**Code Quality:**
+```bash
+# Linting
+make lint
+
+# Code formatting
+make format
+
+# All quality checks
+make lint && make test
+```
+
+### Report Quality Evaluation
+```bash
+# Run analysis with evaluation
 python analyze_bmw_sales.py
 
-# Check evaluation results in:
-# reports/evaluations/evaluation_YYYYMMDD_HHMMSS.json
+# Check evaluation results
+cat reports/evaluations/evaluation_YYYYMMDD_HHMMSS.json
 ```
 
 ### Quality Metrics
@@ -231,6 +300,31 @@ cp -r logs logs_backup_$(date +%Y%m%d)
 - Use role-based access control
 - Log all access attempts
 - Regular security reviews
+
+## Continuous Integration/Deployment
+
+### GitHub Actions Pipeline
+
+Automated CI/CD pipeline runs on every push:
+
+1. **Linting** - Code quality checks with flake8
+2. **Formatting** - Style checks with black
+3. **Testing** - Full test suite with coverage
+4. **Docker Build** - Container image validation
+
+Configure secrets in GitHub repository settings:
+- `OPENAI_API_KEY`
+- `GEMINI_API_KEY`
+
+### Pre-commit Hooks
+
+Install pre-commit hooks for local validation:
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+Now tests and linting run automatically before each commit.
 
 ## Troubleshooting
 

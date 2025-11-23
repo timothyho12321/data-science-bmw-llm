@@ -1,0 +1,27 @@
+services:
+  bmw-analysis:
+    build: .
+    container_name: bmw-sales-analysis
+    volumes:
+      - ./data-bmw:/app/data-bmw:ro
+      - ./reports:/app/reports
+      - ./logs:/app/logs
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    
+  bmw-analysis-dev:
+    build: .
+    container_name: bmw-sales-analysis-dev
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - LLM_PROVIDER=${LLM_PROVIDER:-gemini}
+    command: tail -f /dev/null
+    stdin_open: true
+    tty: true

@@ -11,11 +11,11 @@ import json
 
 class ReportGenerator:
     """Generates comprehensive reports in HTML and Markdown formats"""
-    
+
     def __init__(self, output_dir: str = "reports"):
         """
         Initialize report generator
-        
+
         Parameters:
         -----------
         output_dir : str
@@ -23,14 +23,16 @@ class ReportGenerator:
         """
         self.output_dir = output_dir
         os.makedirs(output_dir, exist_ok=True)
-    
-    def generate_html_report(self, 
-                            analysis_data: Dict[str, Any],
-                            llm_insights: Dict[str, str],
-                            plot_files: List[str]) -> str:
+
+    def generate_html_report(
+        self,
+        analysis_data: Dict[str, Any],
+        llm_insights: Dict[str, str],
+        plot_files: List[str],
+    ) -> str:
         """
         Generate comprehensive HTML report
-        
+
         Parameters:
         -----------
         analysis_data : dict
@@ -39,13 +41,13 @@ class ReportGenerator:
             LLM-generated insights
         plot_files : list
             List of plot file paths
-            
+
         Returns:
         --------
         str : Path to generated HTML report
         """
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        
+
         html_content = f"""
 <!DOCTYPE html>
 <html lang="en">
@@ -376,7 +378,7 @@ class ReportGenerator:
             </div>
         </section>
 """
-        
+
         # Add revenue section if available
         if len(plot_files) > 5 and os.path.exists(plot_files[5]):
             html_content += f"""
@@ -388,7 +390,7 @@ class ReportGenerator:
             </div>
         </section>
 """
-        
+
         # Add correlation analysis
         if len(plot_files) > 6 and os.path.exists(plot_files[6]):
             html_content += f"""
@@ -400,7 +402,7 @@ class ReportGenerator:
             </div>
         </section>
 """
-        
+
         # Add model category if available
         if len(plot_files) > 7 and os.path.exists(plot_files[7]):
             html_content += f"""
@@ -412,7 +414,7 @@ class ReportGenerator:
             </div>
         </section>
 """
-        
+
         html_content += f"""
         <section id="creative-insights">
             <h2>Creative Business Insights</h2>
@@ -437,21 +439,23 @@ class ReportGenerator:
 </body>
 </html>
 """
-        
+
         # Save HTML report
-        html_path = os.path.join(self.output_dir, 'BMW_Sales_Analysis_Report.html')
-        with open(html_path, 'w', encoding='utf-8') as f:
+        html_path = os.path.join(self.output_dir, "BMW_Sales_Analysis_Report.html")
+        with open(html_path, "w", encoding="utf-8") as f:
             f.write(html_content)
-        
+
         return html_path
-    
-    def generate_markdown_report(self,
-                                 analysis_data: Dict[str, Any],
-                                 llm_insights: Dict[str, str],
-                                 plot_files: List[str]) -> str:
+
+    def generate_markdown_report(
+        self,
+        analysis_data: Dict[str, Any],
+        llm_insights: Dict[str, str],
+        plot_files: List[str],
+    ) -> str:
         """
         Generate Markdown report
-        
+
         Parameters:
         -----------
         analysis_data : dict
@@ -460,13 +464,13 @@ class ReportGenerator:
             LLM-generated insights
         plot_files : list
             List of plot file paths
-            
+
         Returns:
         --------
         str : Path to generated Markdown report
         """
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        
+
         md_content = f"""# BMW Sales Analysis Report (2020-2024)
 
 **Comprehensive Analysis of Sales Performance**  
@@ -517,11 +521,11 @@ class ReportGenerator:
 | Year | Total Sales | YoY Growth |
 |------|------------|------------|
 """
-        
-        for year, sales in analysis_data['yearly_trends']['yearly_sales'].items():
-            growth = analysis_data['yearly_trends']['yoy_growth_rate'].get(year, 0)
+
+        for year, sales in analysis_data["yearly_trends"]["yearly_sales"].items():
+            growth = analysis_data["yearly_trends"]["yoy_growth_rate"].get(year, 0)
             md_content += f"| {year} | {sales:,} | {growth:.2f}% |\n"
-        
+
         md_content += f"""
 ---
 
@@ -537,11 +541,15 @@ class ReportGenerator:
 | Region | Sales Volume | Market Share |
 |--------|--------------|--------------|
 """
-        
-        for region, sales in analysis_data['regional_performance']['regional_sales'].items():
-            share = analysis_data['regional_performance']['regional_market_share'][region]
+
+        for region, sales in analysis_data["regional_performance"][
+            "regional_sales"
+        ].items():
+            share = analysis_data["regional_performance"]["regional_market_share"][
+                region
+            ]
             md_content += f"| {region} | {sales:,} | {share:.2f}% |\n"
-        
+
         md_content += f"""
 ---
 
@@ -557,12 +565,14 @@ class ReportGenerator:
 | Model | Sales Volume | Market Share | Avg Price |
 |-------|--------------|--------------|-----------|
 """
-        
-        for model, sales in list(analysis_data['model_performance']['top_3_models'].items()):
-            share = analysis_data['model_performance']['model_market_share'][model]
-            price = analysis_data['model_performance']['avg_price_by_model'][model]
+
+        for model, sales in list(
+            analysis_data["model_performance"]["top_3_models"].items()
+        ):
+            share = analysis_data["model_performance"]["model_market_share"][model]
+            price = analysis_data["model_performance"]["avg_price_by_model"][model]
             md_content += f"| {model} | {sales:,} | {share:.2f}% | ${price:,.2f} |\n"
-        
+
         md_content += f"""
 ---
 
@@ -578,7 +588,7 @@ class ReportGenerator:
 
 ---
 """
-        
+
         # Add revenue section if available
         if len(plot_files) > 5 and os.path.exists(plot_files[5]):
             md_content += f"""
@@ -589,7 +599,7 @@ class ReportGenerator:
 
 ---
 """
-        
+
         # Add correlation analysis
         if len(plot_files) > 6 and os.path.exists(plot_files[6]):
             md_content += f"""
@@ -600,7 +610,7 @@ class ReportGenerator:
 
 ---
 """
-        
+
         md_content += f"""
 ## Creative Business Insights
 
@@ -622,46 +632,50 @@ Report generated automatically using OpenAI GPT-4 and Python
 
 ---
 """
-        
+
         # Save Markdown report
-        md_path = os.path.join(self.output_dir, 'BMW_Sales_Analysis_Report.md')
-        with open(md_path, 'w', encoding='utf-8') as f:
+        md_path = os.path.join(self.output_dir, "BMW_Sales_Analysis_Report.md")
+        with open(md_path, "w", encoding="utf-8") as f:
             f.write(md_content)
-        
+
         return md_path
-    
+
     def _format_text_with_paragraphs(self, text: str) -> str:
         """Format text into HTML paragraphs"""
-        paragraphs = text.strip().split('\n\n')
+        paragraphs = text.strip().split("\n\n")
         formatted = []
-        
+
         for para in paragraphs:
             para = para.strip()
             if para:
                 # Check if it's a list item or heading
-                if para.startswith(('- ', '* ', '• ')):
+                if para.startswith(("- ", "* ", "• ")):
                     # It's a list, wrap in ul
-                    formatted.append('<ul>')
-                    
-                    for line in para.split('\n'):
+                    formatted.append("<ul>")
+
+                    for line in para.split("\n"):
                         if line.strip():
                             # Remove list markers
                             clean_line = line.strip()
-                            for marker in ['- ', '* ', '• ']:
+                            for marker in ["- ", "* ", "• "]:
                                 if clean_line.startswith(marker):
-                                    clean_line = clean_line[len(marker):]
+                                    clean_line = clean_line[len(marker) :]
                                     break
                             # Check for numbered markers like "1. " "2. " etc and convert to bullet
-                            if len(clean_line) > 3 and clean_line[0].isdigit() and clean_line[1:3] in ['. ', ') ']:
+                            if (
+                                len(clean_line) > 3
+                                and clean_line[0].isdigit()
+                                and clean_line[1:3] in [". ", ") "]
+                            ):
                                 clean_line = clean_line[3:].strip()
-                            formatted.append(f'<li>{clean_line}</li>')
-                    
-                    formatted.append('</ul>')
-                elif para[0].isdigit() and len(para) > 2 and para[1:3] in ['. ', ') ']:
+                            formatted.append(f"<li>{clean_line}</li>")
+
+                    formatted.append("</ul>")
+                elif para[0].isdigit() and len(para) > 2 and para[1:3] in [". ", ") "]:
                     # It's a numbered list - convert to bullet list
-                    formatted.append('<ul>')
-                    
-                    for line in para.split('\n'):
+                    formatted.append("<ul>")
+
+                    for line in para.split("\n"):
                         if line.strip():
                             # Remove numbered markers
                             clean_line = line.strip()
@@ -669,44 +683,49 @@ Report generated automatically using OpenAI GPT-4 and Python
                             if len(clean_line) > 2 and clean_line[0].isdigit():
                                 # Find the end of the number
                                 num_end = 1
-                                while num_end < len(clean_line) and clean_line[num_end].isdigit():
+                                while (
+                                    num_end < len(clean_line)
+                                    and clean_line[num_end].isdigit()
+                                ):
                                     num_end += 1
-                                if num_end < len(clean_line) and clean_line[num_end:num_end+2] in ['. ', ') ']:
-                                    clean_line = clean_line[num_end+2:].strip()
-                            formatted.append(f'<li>{clean_line}</li>')
-                    
-                    formatted.append('</ul>')
-                elif para.startswith('#'):
+                                if num_end < len(clean_line) and clean_line[
+                                    num_end : num_end + 2
+                                ] in [". ", ") "]:
+                                    clean_line = clean_line[num_end + 2 :].strip()
+                            formatted.append(f"<li>{clean_line}</li>")
+
+                    formatted.append("</ul>")
+                elif para.startswith("#"):
                     # It's a heading
-                    level = para.count('#', 0, 4)
-                    text = para.lstrip('#').strip()
-                    formatted.append(f'<h{level+2}>{text}</h{level+2}>')
+                    level = para.count("#", 0, 4)
+                    text = para.lstrip("#").strip()
+                    formatted.append(f"<h{level+2}>{text}</h{level+2}>")
                 else:
                     # Regular paragraph
-                    formatted.append(f'<p>{para}</p>')
-        
-        return '\n'.join(formatted)
-    
+                    formatted.append(f"<p>{para}</p>")
+
+        return "\n".join(formatted)
+
     def _create_regional_table(self, regional_data: Dict[str, Any]) -> str:
         """Create HTML table for regional performance"""
         html = '<table class="data-table"><thead><tr><th>Region</th><th>Sales Volume</th><th>Market Share</th><th>Avg Price</th></tr></thead><tbody>'
-        
-        for region, sales in regional_data['regional_sales'].items():
-            share = regional_data['regional_market_share'][region]
-            price = regional_data['avg_price_by_region'][region]
-            html += f'<tr><td>{region}</td><td>{sales:,}</td><td>{share:.2f}%</td><td>${price:,.2f}</td></tr>'
-        
-        html += '</tbody></table>'
+
+        for region, sales in regional_data["regional_sales"].items():
+            share = regional_data["regional_market_share"][region]
+            price = regional_data["avg_price_by_region"][region]
+            html += f"<tr><td>{region}</td><td>{sales:,}</td><td>{share:.2f}%</td><td>${price:,.2f}</td></tr>"
+
+        html += "</tbody></table>"
         return html
-    
+
     def _create_model_table(self, model_data: Dict[str, Any]) -> str:
         """Create HTML table for model performance"""
         html = '<table class="data-table"><thead><tr><th>Model</th><th>Sales Volume</th><th>Market Share</th><th>Avg Price</th></tr></thead><tbody>'
-        
-        for model, sales in model_data['top_3_models'].items():
-            share = model_data['model_market_share'][model]
-            price = model_data['avg_price_by_model'][model]
-            html += f'<tr><td><strong>{model}</strong></td><td>{sales:,}</td><td>{share:.2f}%</td><td>${price:,.2f}</td></tr>'
-        
-        html += '</tbody></table>'
+
+        for model, sales in model_data["top_3_models"].items():
+            share = model_data["model_market_share"][model]
+            price = model_data["avg_price_by_model"][model]
+            html += f"<tr><td><strong>{model}</strong></td><td>{sales:,}</td><td>{share:.2f}%</td><td>${price:,.2f}</td></tr>"
+
+        html += "</tbody></table>"
         return html
